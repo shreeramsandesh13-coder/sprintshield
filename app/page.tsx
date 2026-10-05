@@ -6,6 +6,15 @@ export default function Home() {
   const [code, setCode] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [results, setResults] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
+
+const handleCopy = () => {
+  if (results?.patchedCode) {
+    navigator.clipboard.writeText(results.patchedCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+};
 
 const handleAnalyze = async () => {
   if (!code) return;
@@ -76,30 +85,39 @@ const handleAnalyze = async () => {
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="bg-red-950/30 border border-red-900/50 p-4 rounded-xl">
-                <h3 className="text-red-400 font-semibold flex items-center gap-2 mb-3">
-                  <Lock className="w-5 h-5" /> Security Vulnerabilities
-                </h3>
-                <ul className="list-disc list-inside space-y-1 text-neutral-300 text-sm">
-                  {results.security?.map((issue: string, i: number) => <li key={i}>{issue}</li>)}
-                </ul>
-              </div>
+  <div className="bg-red-950/30 border border-red-900/50 p-4 rounded-xl">
+    <h3 className="text-red-400 font-semibold flex items-center gap-2 mb-3">
+      <Lock className="w-5 h-5" /> Security Vulnerabilities
+    </h3>
+    <ul className="list-disc list-inside space-y-1 text-neutral-300 text-sm">
+      {results.security?.map((issue: string, i: number) => <li key={i}>{issue}</li>)}
+    </ul>
+  </div>
 
-              <div className="bg-amber-950/30 border border-amber-900/50 p-4 rounded-xl">
-                <h3 className="text-amber-400 font-semibold flex items-center gap-2 mb-3">
-                  <Zap className="w-5 h-5" /> Performance Traps
-                </h3>
-                <ul className="list-disc list-inside space-y-1 text-neutral-300 text-sm">
-                  {results.performance?.map((issue: string, i: number) => <li key={i}>{issue}</li>)}
-                </ul>
-              </div>
+  <div className="bg-amber-950/30 border border-amber-900/50 p-4 rounded-xl">
+    <h3 className="text-amber-400 font-semibold flex items-center gap-2 mb-3">
+      <Zap className="w-5 h-5" /> Performance Traps
+    </h3>
+    <ul className="list-disc list-inside space-y-1 text-neutral-300 text-sm">
+      {results.performance?.map((issue: string, i: number) => <li key={i}>{issue}</li>)}
+    </ul>
+  </div>
 
-              <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl flex-1">
-                <h3 className="text-emerald-400 font-semibold mb-3">Verified Safe Code</h3>
-                <pre className="text-sm font-mono text-neutral-300 bg-black p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
-                  {results.patchedCode}
-                </pre>
-              </div>
+  <div className="bg-neutral-900 border border-neutral-800 p-4 rounded-xl flex-1">
+    <div className="flex items-center justify-between mb-3">
+      <h3 className="text-emerald-400 font-semibold">Verified Safe Code</h3>
+      <button
+        onClick={handleCopy}
+        className="px-2.5 py-1 text-xs font-medium rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 transition-colors"
+      >
+        {copied ? "Copied!" : "Copy Code"}
+      </button>
+    </div>
+    <pre className="text-sm font-mono text-neutral-300 bg-black p-4 rounded-lg overflow-x-auto whitespace-pre-wrap">
+      {results.patchedCode}
+    </pre>
+  </div>
+</div>
             </div>
           )}
         </div>
