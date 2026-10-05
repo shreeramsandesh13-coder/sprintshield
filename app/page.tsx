@@ -118,7 +118,6 @@ const handleAnalyze = async () => {
     </pre>
   </div>
 </div>
-            </div>
           )}
         </div>
       </div>
